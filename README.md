@@ -1,40 +1,35 @@
 # 💻 Coding Challenge: Time Tracking
 
-
-🧠 Zielsetzung
+## 🧠 Zielsetzung
 
 Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre täglichen Arbeitsstunden verschiedenen Projekten zuordnen können. Die Anwendung umfasst ein Frontend, ein Backend sowie eine Datenbank zur Speicherung aller relevanten Daten.
 
+## 🛠️ Technische Anforderungen
 
-🛠️ Technische Anforderungen
-
-Frontend
+### Frontend
 - Single-Page-App mit einem modernen JavaScript-Framework (z. B. Angular oder React)
 - Einsatz eines CSS-Frameworks wie Tailwind CSS zur Gestaltung der Benutzeroberfläche
 - Nutzung zusätzlicher CSS-Libraries zur UI-Darstellung ist erlaubt
 
-Backend
+### Backend
 - RESTful API basierend auf Spring Boot
 
-Datenbank
+### Datenbank
 - SQL- oder NoSQL-Datenbank (z. B. H2, MySQL, PostgreSQL)
 - Speicherung von Projekten und Zeiteinträgen
 
+## 📦 Anforderungen
 
-📦 Anforderungen
-
-Wochen- und Monatsübersicht
+### Wochen- und Monatsübersicht
 
 - Wochenansicht: Anzeige der Gesamtstunden pro Tag oder pro Projekt
 - Monatsansicht: Zusammenfassung der Stunden pro Monat (tages- oder wochenweise)
   
-Tageszeiterfassung
+### Tageszeiterfassung
 - Erfassen von Arbeitszeiten für jeden Kalendertag
 - Auswahl eines Projekts und Eingabe der gearbeiteten Stunden
 - Mindestfelder: Datum, Projekt, Dauer (Stunden)
 
-
-
-⏱ Zeitrahmen
+## ⏱ Zeitrahmen
 
 Bitte investiere nicht mehr als 8 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne im README unter „Next Steps“ dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
