@@ -1,8 +1,10 @@
 💻 Coding Challenge: Time Tracking
 
+
 🧠 Zielsetzung
 
 Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre täglichen Arbeitsstunden verschiedenen Projekten zuordnen können. Die Anwendung umfasst ein Frontend, ein Backend sowie eine Datenbank zur Speicherung aller relevanten Daten.
+
 
 🛠️ Technische Anforderungen
 
@@ -18,6 +20,7 @@ Datenbank
 - SQL- oder NoSQL-Datenbank (z. B. H2, MySQL, PostgreSQL)
 - Speicherung von Projekten und Zeiteinträgen
 
+
 📦 Anforderungen
 
 Wochen- und Monatsübersicht
@@ -29,6 +32,7 @@ Tageszeiterfassung
 - Erfassen von Arbeitszeiten für jeden Kalendertag
 - Auswahl eines Projekts und Eingabe der gearbeiteten Stunden
 - Mindestfelder: Datum, Projekt, Dauer (Stunden)
+
 
 
 ⏱ Zeitrahmen
