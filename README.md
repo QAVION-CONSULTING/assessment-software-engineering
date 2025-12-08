@@ -22,7 +22,7 @@ Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre 
 
 ### Wochen- und Monatsübersicht
 
-- Wochenansicht: Anzeige der Gesamtstunden pro Tag oder pro Projekt
+- Wochenansicht: Anzeige der Gesamtstunden pro Tag
 - Monatsansicht: Zusammenfassung der Stunden pro Monat (tages- oder wochenweise)
   
 ### Tageszeiterfassung
@@ -32,4 +32,4 @@ Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre 
 
 ## ⏱ Zeitrahmen
 
-Bitte investiere nicht mehr als 8 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne im README unter „Next Steps“ dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
+Bitte investiere nicht mehr als 8 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne in NEXT_STEPS.md dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
