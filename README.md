@@ -1,20 +1,36 @@
-💻 Coding Challenge: Mini-Blog
+💻 Coding Challenge: Time Tracking
 
 🧠 Zielsetzung
 
-Entwickle ein einfaches Backend für eine Mini-Blog. Nutzer:innen sollen Blogbeiträge erstellen, lesen, bearbeiten und löschen können (CRUD). Zusätzlich sollen Kommentare zu einzelnen Blogposts möglich sein. Die Beiträge sollen chronologisch (neueste zuerst) angezeigt werden.
+Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre täglichen Arbeitsstunden verschiedenen Projekten zuordnen können. Die Anwendung umfasst ein Frontend, ein Backend sowie eine Datenbank zur Speicherung aller relevanten Daten.
+
+🛠️ Technische Anforderungen
+
+Frontend
+- Single-Page-App mit einem modernen JavaScript-Framework (z. B. Angular oder React)
+- Einsatz eines CSS-Frameworks wie Tailwind CSS zur Gestaltung der Benutzeroberfläche
+- Nutzung zusätzlicher CSS-Libraries zur UI-Darstellung ist erlaubt
+
+Backend
+- RESTful API basierend auf Spring Boot
+
+Datenbank
+- SQL- oder NoSQL-Datenbank (z. B. H2, MySQL, PostgreSQL)
+- Speicherung von Projekten und Zeiteinträgen
 
 📦 Anforderungen
 
-- Vollständiges CRUD für Blogposts
-- Kommentare zu einem Blogpost hinzufügen
-- Anzeige der Beiträge nach Erstellungsdatum sortiert (neueste zuerst)
-- (Optional) Pagination für die Beitragsübersicht
+Wochen- und Monatsübersicht
 
-🛠️ Technologie Stack:
-- Java 17 oder höher
-- Spring Boot (oder ein vergleichbares Java-Framework)
+- Wochenansicht: Anzeige der Gesamtstunden pro Tag oder pro Projekt
+- Monatsansicht: Zusammenfassung der Stunden pro Monat (tages- oder wochenweise)
+  
+Tageszeiterfassung
+- Erfassen von Arbeitszeiten für jeden Kalendertag
+- Auswahl eines Projekts und Eingabe der gearbeiteten Stunden
+- Mindestfelder: Datum, Projekt, Dauer (Stunden)
+
 
 ⏱ Zeitrahmen
 
-Bitte investiere nicht mehr als 4 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne im README unter „Next Steps“ dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
+Bitte investiere nicht mehr als 8 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne im README unter „Next Steps“ dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
