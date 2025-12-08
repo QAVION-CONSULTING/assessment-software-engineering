@@ -9,26 +9,27 @@ Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre 
 ## 🛠️ Technische Anforderungen
 
 ### Frontend
-- Single-Page-App mit einem modernen JavaScript-Framework (z. B. Angular oder React)
-- Einsatz eines CSS-Frameworks wie Tailwind CSS zur Gestaltung der Benutzeroberfläche
-- Nutzung zusätzlicher CSS-Libraries zur UI-Darstellung ist erlaubt
+- Implementierung als Single Page Application (SPA)
+- Nutzung eines modernen Frameworks: Angular oder React
+- Einsatz eines CSS-Frameworks wie Tailwind CSS
+- Zusätzliche UI-Libraries sind erlaubt
 
 ### Backend
 - RESTful API basierend auf Spring Boot
 
 ### Datenbank
-- SQL- oder NoSQL-Datenbank (z. B. H2, MySQL, PostgreSQL)
-- Speicherung von Projekten und Zeiteinträgen
+- SQL oder NoSQL möglich (z. B. H2, MySQL, PostgreSQL)
+- Persistenz für Zeiteinträge
 
 ## 📦 Anforderungen
 
 ### Wochen- und Monatsübersicht
 
 - Wochenansicht: Anzeige der Gesamtstunden pro Tag
-- Monatsansicht: Zusammenfassung der Stunden pro Monat (tages- oder wochenweise)
+- Monatsansicht: Zusammenfassung der erfassten Stunden pro Monat (wahlweise tages- oder wochenweise aggregiert)
   
 ### Tageszeiterfassung
-- Erfassen von Arbeitszeiten für jeden Kalendertag
+- Erfassung von Arbeitszeiten für jeden Tag
 - Auswahl eines Projekts und Eingabe der gearbeiteten Stunden
 - Mindestfelder: Datum, Projekt, Dauer (Stunden)
 
