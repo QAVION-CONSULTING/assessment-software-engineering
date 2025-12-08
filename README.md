@@ -4,6 +4,8 @@
 
 Entwickle einer browserbasierten Zeiterfassungsanwendung, mit der Benutzer ihre täglichen Arbeitsstunden verschiedenen Projekten zuordnen können. Die Anwendung umfasst ein Frontend, ein Backend sowie eine Datenbank zur Speicherung aller relevanten Daten.
 
+👉 Bitte arbeite in einem separaten Branch und committe alle relevanten Änderungen nachvollziehbar.
+
 ## 🛠️ Technische Anforderungen
 
 ### Frontend
