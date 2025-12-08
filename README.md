@@ -26,7 +26,7 @@ Entwickle einer browserbasierten Zeiterfassung, mit der Benutzer ihre täglichen
 ### Wochen- und Monatsübersicht
 
 - Wochenansicht: Anzeige der Gesamtstunden pro Tag
-- Monatsansicht: Zusammenfassung der erfassten Stunden pro Monat (wahlweise tages- oder wochenweise aggregiert)
+- Monatsansicht: Zusammenfassung der erfassten Stunden pro Monat
   
 ### Tageszeiterfassung
 - Erfassung von Arbeitszeiten für jeden Tag
