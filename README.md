@@ -35,4 +35,4 @@ Entwickle einer browserbasierten Zeiterfassung, mit der Benutzer ihre täglichen
 
 ## ⏱ Zeitrahmen
 
-Bitte investiere nicht mehr als 8 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne in NEXT_STEPS.md dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
+Bitte investiere nicht mehr als 6 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne in NEXT_STEPS.md dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
