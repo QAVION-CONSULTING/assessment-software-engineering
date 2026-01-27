@@ -1,38 +1,44 @@
 # 💻 Coding Challenge: Time Tracking
 
-## 🧠 Zielsetzung
+## 🧠 Objective
 
-Entwickle einer browserbasierten Zeiterfassung, mit der Benutzer ihre täglichen Arbeitsstunden verschiedenen Projekten zuordnen können. Die Anwendung umfasst ein Frontend, ein Backend sowie eine Datenbank zur Speicherung aller relevanten Daten.
+Develop a browser-based time tracking application that allows users to assign their daily working hours to different projects. The application should include a frontend, a backend, and a database for storing all relevant data.
 
-👉 Bitte arbeite in einem separaten Branch und committe alle relevanten Änderungen nachvollziehbar.
+👉 Please work in a separate branch and commit all relevant changes in a clear and traceable manner.
 
-## 🛠️ Technische Anforderungen
+## 🛠️ Technical Requirements
 
 ### Frontend
-- Implementierung als Single Page Application (SPA)
-- Nutzung eines modernen Frameworks: Angular oder React
-- Einsatz eines CSS-Frameworks wie Tailwind CSS
-- Zusätzliche UI-Libraries sind erlaubt
+- Implementation as a Single Page Application (SPA)
+- Use of a modern framework such as Angular or React
+- Use of a CSS framework such as Tailwind CSS
+- Additional UI libraries are allowed
 
 ### Backend
-- RESTful API basierend auf Spring Boot
+- RESTful API based on Spring Boot
 
 ### Datenbank
-- SQL oder NoSQL möglich (z. B. H2, MySQL, PostgreSQL)
-- Persistenz für Zeiteinträge
+- SQL or NoSQL is possible (e.g., H2, MySQL, PostgreSQL)
+- Persistence for time entries
 
-## 📦 Anforderungen
+## 📦 Requirements
 
-### Wochen- und Monatsübersicht
+### Weekly and Monthly Overview
 
-- Wochenansicht: Anzeige der Gesamtstunden pro Tag
-- Monatsansicht: Zusammenfassung der erfassten Stunden pro Monat
+- Weekly view: Display of total hours per day
+- Monthly view: Summary of recorded hours per month
   
-### Tageszeiterfassung
-- Erfassung von Arbeitszeiten für jeden Tag
-- Auswahl eines Projekts und Eingabe der gearbeiteten Stunden
-- Mindestfelder: Datum, Projekt, Dauer (Stunden)
+### Daily Time Tracking
+- Recording of working times for each day
+- Selection of a project and entry of worked hours
+- MRequired fields: Date, project, duration (hours)
+  
+### Project & Cost Management
+- Projects can be configured with defined budgets (time and cost)
+- Hourly rates can be assigned per project or per user
+- Automatic cost calculation based on recorded working hours
+- Warnings or notifications when project budgets are exceeded
+  
+## ⏱ Time Frame
 
-## ⏱ Zeitrahmen
-
-Bitte investiere nicht mehr als 6 Stunden in die Umsetzung. Alles, was innerhalb dieses Zeitrahmens nicht umgesetzt werden kann, darf gerne in NEXT_STEPS.md dokumentiert werden – inkl. kurzer Beschreibung, wie du es angehen würdest.
+Please do not spend more than 6 hours on the implementation. Anything that cannot be implemented within this time frame may be documented in NEXT_STEPS.md, including a short description of how you would approach it.
