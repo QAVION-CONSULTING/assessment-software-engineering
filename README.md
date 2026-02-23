@@ -1,12 +1,12 @@
-# 💻 Coding Challenge: Time Tracking
+# Assessment: Time Tracking
 
-## 🧠 Objective
+## Objective
 
 Develop a browser-based time tracking application that allows users to assign their daily working hours to different projects. The application should include a frontend, a backend, and a database for storing all relevant data.
 
-👉 Please work in a separate branch and commit all relevant changes in a clear and traceable manner.
+Please work in a separate branch and commit all relevant changes in a clear and traceable manner.
 
-## 🛠️ Technical Requirements
+## Technical Requirements
 
 ### Frontend
 - Implementation as a Single Page Application (SPA)
@@ -21,7 +21,7 @@ Develop a browser-based time tracking application that allows users to assign th
 - SQL or NoSQL is possible (e.g., H2, MySQL, PostgreSQL)
 - Persistence for time entries
 
-## 📦 Requirements
+## Requirements
 
 ### Weekly and Monthly Overview
 
@@ -39,6 +39,6 @@ Develop a browser-based time tracking application that allows users to assign th
 - Automatic cost calculation based on recorded working hours
 - Warnings or notifications when project budgets are exceeded
   
-## ⏱ Time Frame
+## Time Frame
 
 Please do not spend more than 6 hours on the implementation. Anything that cannot be implemented within this time frame may be documented in NEXT_STEPS.md, including a short description of how you would approach it.
