@@ -1,9 +1,10 @@
-<script setup lang="ts"></script>
-
 <template>
   <header class="app-header">
-    <div class="container">
-      <RouterLink to="/" class="brand">Time Tracking</RouterLink>
+    <div class="container header-inner">
+      <RouterLink to="/projects" class="brand">Time Tracking</RouterLink>
+      <nav aria-label="Main">
+        <RouterLink to="/projects">Projects</RouterLink>
+      </nav>
     </div>
   </header>
 </template>

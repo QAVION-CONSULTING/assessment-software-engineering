@@ -1,7 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
+import ProjectsView from '@/views/ProjectsView.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
-  routes: [{ path: '/', name: 'home', component: HomeView }],
+  routes: [
+    { path: '/', redirect: '/projects' },
+    { path: '/projects', name: 'projects', component: ProjectsView, meta: { title: 'Projects' } },
+  ],
+})
+
+router.afterEach((to) => {
+  document.title = `${to.meta.title ?? 'Time Tracking'} · Time Tracking`
 })
