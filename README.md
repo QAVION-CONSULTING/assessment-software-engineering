@@ -196,13 +196,16 @@ E2E_BASE_URL=http://localhost:5173 npm run test:e2e
 
 The tests run on a desktop and a mobile (Pixel 5) profile. They create uniquely named projects and use random historic dates so runs do not interfere (projects cannot be deleted, so test projects remain in the dev database; `docker compose down -v` resets it).
 
-**macOS with Colima**: Testcontainers needs to find the Colima socket:
+**macOS with Colima**: Colima does not create the default `/var/run/docker.sock`, so Testcontainers cannot find Docker on its own and every integration test fails at context start-up ("Could not find a valid Docker environment"). `DOCKER_HOST` points the Docker client at the Colima socket, and `TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE` tells Testcontainers which socket path to mount into its helper containers (the path as seen inside the Colima VM). One-off form:
 
 ```bash
-export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
-export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
-cd backend && mvn verify
+cd backend
+DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock" \
+TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock \
+mvn clean verify
 ```
+
+or export both variables once per shell and run `mvn verify` as usual. Docker Desktop users need neither variable.
 
 `pom.xml` pins `testcontainers.version` to 1.21.4 because the version managed by Spring Boot 3.5.6 (1.21.3) cannot talk to Docker 29.
 
