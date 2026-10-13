@@ -1,0 +1,22 @@
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Backend
+backend/target/
+*.class
+*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
