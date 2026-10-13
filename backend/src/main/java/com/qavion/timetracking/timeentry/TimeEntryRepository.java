@@ -21,6 +21,13 @@ public interface TimeEntryRepository extends JpaRepository<TimeEntry, Long> {
     List<TimeEntry> search(@Param("projectId") Long projectId, @Param("from") LocalDate from,
             @Param("to") LocalDate to);
 
+    /**
+     * Takes a transaction-scoped PostgreSQL advisory lock for one calendar date and releases it on commit/rollback.
+     * Concurrent writers for the same date queue up, so the "24 h per day" check-then-write cannot race.
+     */
+    @Query(value = "select 1 from (select pg_advisory_xact_lock(:dayKey)) as lock", nativeQuery = true)
+    int lockDay(@Param("dayKey") long dayKey);
+
     /** Hours booked on a date across all projects (single-user assumption). */
     @Query("select coalesce(sum(e.durationHours), 0) from TimeEntry e where e.entryDate = :date")
     BigDecimal sumHoursByDate(@Param("date") LocalDate date);

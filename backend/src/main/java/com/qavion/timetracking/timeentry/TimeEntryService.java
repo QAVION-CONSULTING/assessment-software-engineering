@@ -13,8 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
  * Time entry use cases.
  * <p>
  * The 24 h/day rule assumes a single user: hours are summed per date across all projects.
- * Known limitation: the check-then-write is not serialized, so two concurrent requests could
- * together exceed the limit. A per-date lock or a user-scoped advisory lock would close this gap.
+ * Concurrent writes for the same date are serialized with a transaction-scoped advisory lock (see
+ * {@link TimeEntryRepository#lockDay}), so parallel requests cannot jointly exceed the limit. With multiple
+ * users the lock key would have to include the user.
  */
 @Service
 @Transactional(readOnly = true)
@@ -73,6 +74,7 @@ public class TimeEntryService {
 
     /** @param existing the entry being edited; its old duration is not counted if it is on the same date. */
     private void ensureDailyLimit(TimeEntryRequest request, TimeEntry existing) {
+        entries.lockDay(request.entryDate().toEpochDay());
         BigDecimal alreadyBooked = entries.sumHoursByDate(request.entryDate());
         if (existing != null && existing.getEntryDate().equals(request.entryDate())) {
             alreadyBooked = alreadyBooked.subtract(existing.getDurationHours());

@@ -198,6 +198,35 @@ class TimeEntryApiIntegrationTest extends ApiIntegrationTest {
         postJson("/api/time-entries", entryJson(project, "2025-03-10", "1")).andExpect(status().isCreated());
     }
 
+    @Test
+    void concurrentRequestsCannotExceedDailyLimit() throws Exception {
+        long project = createProject("P", "100", "1000", "10");
+        int requests = 8; // 5 h each: at most 4 fit into 24 h
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(requests);
+        try {
+            var start = new java.util.concurrent.CountDownLatch(1);
+            java.util.List<java.util.concurrent.Future<Integer>> results = new java.util.ArrayList<>();
+            for (int i = 0; i < requests; i++) {
+                results.add(pool.submit(() -> {
+                    start.await();
+                    return postJson("/api/time-entries", entryJson(project, "2025-03-10", "5"))
+                            .andReturn().getResponse().getStatus();
+                }));
+            }
+            start.countDown();
+            int created = 0;
+            for (var result : results) {
+                if (result.get() == 201) {
+                    created++;
+                }
+            }
+            org.assertj.core.api.Assertions.assertThat(created).isEqualTo(4);
+        } finally {
+            pool.shutdownNow();
+        }
+        getJson("/api/time-entries?from=2025-03-10&to=2025-03-10").andExpect(jsonPath("$", hasSize(4)));
+    }
+
     // ---- budget calculations ----
 
     @Test
