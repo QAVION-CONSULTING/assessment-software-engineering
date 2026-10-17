@@ -7,4 +7,4 @@
 
 # Java / Maven
 backend/target/
-*.class
+*.class*.tsbuildinfo
