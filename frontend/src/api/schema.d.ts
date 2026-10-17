@@ -170,7 +170,7 @@ export interface components {
              * @description Optimistic-lock version; send as If-Match on PUT
              * @example 3
              */
-            version?: number;
+            version: number;
             /**
              * @description 4950 = 82.5 h
              * @example 4950

@@ -32,8 +32,8 @@ async function unwrap<T>(
 
 // ---- Projects ----
 
-export const listProjects = () =>
-  unwrap<ProjectResponse[]>(api.GET("/api/projects"));
+export const listProjects = (signal?: AbortSignal) =>
+  unwrap<ProjectResponse[]>(api.GET("/api/projects", { signal }));
 
 export const getProject = (id: number) =>
   unwrap<ProjectResponse>(api.GET("/api/projects/{id}", { params: { path: { id } } }));
@@ -56,9 +56,9 @@ export interface TimeEntryFilters {
   projectId?: number;
 }
 
-export const listTimeEntries = (filters: TimeEntryFilters = {}) =>
+export const listTimeEntries = (filters: TimeEntryFilters = {}, signal?: AbortSignal) =>
   unwrap<TimeEntryResponse[]>(
-    api.GET("/api/time-entries", { params: { query: { ...filters } } }),
+    api.GET("/api/time-entries", { params: { query: { ...filters } }, signal }),
   );
 
 export const getTimeEntry = (id: number) =>

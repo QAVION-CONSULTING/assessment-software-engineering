@@ -368,7 +368,7 @@ components:
         - ratios rounded to 4 decimals (HALF_UP), can exceed 1.0
         - warning = ratio >= 0.80 && ratio < 1.0
         - exceeded = ratio >= 1.0
-      required: [id, name, timeBudgetMinutes, costBudgetCents, hourlyRateCents, recordedMinutes, recordedCostCents, timeBudgetRatio, costBudgetRatio, timeBudgetWarning, timeBudgetExceeded, costBudgetWarning, costBudgetExceeded]
+      required: [id, name, version, timeBudgetMinutes, costBudgetCents, hourlyRateCents, recordedMinutes, recordedCostCents, timeBudgetRatio, costBudgetRatio, timeBudgetWarning, timeBudgetExceeded, costBudgetWarning, costBudgetExceeded]
       properties:
         id: { type: integer, format: int64, example: 1 }
         name: { type: string, example: Website Relaunch }
