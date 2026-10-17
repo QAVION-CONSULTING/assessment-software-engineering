@@ -310,7 +310,7 @@ export default function TimeEntriesPage() {
         onClose={closeModal}
         title={modal?.mode === "edit" ? "Edit time entry" : "New time entry"}
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <Stack>
             <DateInput
               label="Date"
@@ -331,8 +331,6 @@ export default function TimeEntriesPage() {
             <NumberInput
               label="Duration (hours)"
               required
-              min={0.25}
-              max={24}
               step={0.25}
               key={form.key("durationHours")}
               {...form.getInputProps("durationHours")}

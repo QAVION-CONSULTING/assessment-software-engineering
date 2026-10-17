@@ -8,3 +8,10 @@
 # Java / Maven
 backend/target/
 *.class*.tsbuildinfo
+
+# Frontend test artifacts
+frontend/test-results/
+frontend/playwright-report/
+
+# Editor
+.vscode/

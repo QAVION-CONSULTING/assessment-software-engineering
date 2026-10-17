@@ -27,11 +27,11 @@ import {
 } from "../api/endpoints";
 
 /** cents -> "1,234.56 €" */
-const fmtEur = (cents: number) =>
+export const fmtEur = (cents: number) =>
   (cents / 100).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 
 /** minutes -> "82,5 h" */
-const fmtHours = (minutes: number) => `${(minutes / 60).toLocaleString("de-DE")} h`;
+export const fmtHours = (minutes: number) => `${(minutes / 60).toLocaleString("de-DE")} h`;
 
 /** progress bar percentage, rounded to 1 decimal */
 const pct = (used: number, total: number) => Math.round((used / total) * 1000) / 10;
@@ -360,7 +360,7 @@ export default function ProjectsPage() {
         onClose={closeModal}
         title={modal?.mode === "edit" ? `Edit project: ${modal.project.name}` : "New project"}
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <Stack>
             <TextInput
               label="Name"
