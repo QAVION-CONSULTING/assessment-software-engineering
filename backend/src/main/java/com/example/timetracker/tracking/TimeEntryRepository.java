@@ -40,6 +40,13 @@ public interface TimeEntryRepository extends JpaRepository<TimeEntry, Long> {
                                      @Param("excludeId") Long excludeId);
 
     /**
+     * Total recorded minutes for a project — used by the budget status.
+     */
+    @Query("select coalesce(sum(e.durationMinutes), 0) from TimeEntry e where e.project.id = :projectId")
+    long totalMinutesForProject(@Param("projectId") Long projectId);
+
+
+    /**
      * Recorded minutes per project, for budget status and the monthly view.
      */
     @Query("""

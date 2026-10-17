@@ -40,6 +40,14 @@ public class TimeEntry {
 
     public static final int MAX_DURATION_MINUTES = 1440;
 
+    public void replace(LocalDate newDate, Integer newDurationMinutes,
+                        String newDescription, Project newProject) {
+        this.date = newDate;
+        this.durationMinutes = newDurationMinutes;
+        this.description = newDescription;
+        this.project = newProject;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

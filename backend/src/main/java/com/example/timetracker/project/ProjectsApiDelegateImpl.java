@@ -3,41 +3,49 @@ package com.example.timetracker.project;
 import com.example.timetracker.api.ProjectsApiDelegate;
 import com.example.timetracker.model.ProjectInput;
 import com.example.timetracker.model.ProjectResponse;
-import org.springframework.http.HttpStatus;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
- * Implementation of the Projects API delegate.
- * Currently returns 501 Not Implemented; business logic to be added.
+ * Delegate implementation for the Projects API; delegates to
+ * {@link ProjectService} and maps results to HTTP responses.
  */
 @Service
+@RequiredArgsConstructor
 public class ProjectsApiDelegateImpl implements ProjectsApiDelegate {
+
+    private final ProjectService projectService;
 
     @Override
     public ResponseEntity<ProjectResponse> createProject(ProjectInput projectInput) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        ProjectResponse created = projectService.create(projectInput);
+        return ResponseEntity
+                .created(ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{id}").buildAndExpand(created.getId()).toUri())
+                .body(created);
     }
 
     @Override
     public ResponseEntity<Void> deleteProject(Long id) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        projectService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<ProjectResponse> getProject(Long id) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.ok(projectService.get(id));
     }
 
     @Override
     public ResponseEntity<List<ProjectResponse>> listProjects() {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.ok(projectService.list());
     }
 
     @Override
     public ResponseEntity<ProjectResponse> updateProject(Long ifMatch, Long id, ProjectInput projectInput) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.ok(projectService.update(id, ifMatch, projectInput));
     }
 }
