@@ -1,6 +1,7 @@
 package com.example.timetracker.common;
 
 import com.example.timetracker.model.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,24 @@ public class GlobalExceptionHandler {
                 .sorted()
                 .toList();
         return build(HttpStatus.BAD_REQUEST, "Validation failed", details);
+    }
+
+    /**
+     * Bean Validation failures raised at persist/flush time (e.g.
+     * @PastOrPresent on an entity field) — same 400 contract.
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> constraintViolation(ConstraintViolationException ex) {
+        List<String> details = ex.getConstraintViolations().stream()
+                .map(v -> lastPathElement(v.getPropertyPath().toString()) + ": " + v.getMessage())
+                .sorted()
+                .toList();
+        return build(HttpStatus.BAD_REQUEST, "Validation failed", details);
+    }
+
+    private static String lastPathElement(String path) {
+        int dot = path.lastIndexOf('.');
+        return dot >= 0 ? path.substring(dot + 1) : path;
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, List<String> details) {

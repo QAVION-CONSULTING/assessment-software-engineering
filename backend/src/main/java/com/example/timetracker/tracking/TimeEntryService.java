@@ -39,9 +39,9 @@ public class TimeEntryService {
     @Transactional
     public TimeEntryResponse create(TimeEntryInput input) {
         Project project = findProject(input.getProjectId());
-        int alreadyRecorded = timeEntryRepository.totalMinutesForDate(input.getDate());
         requireDurationBounds(input.getDurationMinutes());
-        requireDailyCap(input.getDate(), alreadyRecorded, input.getDurationMinutes(), null);
+        int alreadyRecorded = timeEntryRepository.totalMinutesForDate(input.getDate());
+        requireDailyCap(input.getDate(), alreadyRecorded, input.getDurationMinutes());
 
         TimeEntry entry = TimeEntry.builder()
                 .date(input.getDate())
@@ -63,11 +63,16 @@ public class TimeEntryService {
 
         Project project = findProject(input.getProjectId());
         requireDurationBounds(input.getDurationMinutes());
+        // The daily-cap sum must exclude the entry being edited — its old
+        // duration would otherwise be counted twice.
         int alreadyRecorded = timeEntryRepository.totalMinutesForDateExcluding(
                 input.getDate(), id);
-        requireDailyCap(input.getDate(), alreadyRecorded, input.getDurationMinutes(), id);
+        requireDailyCap(input.getDate(), alreadyRecorded, input.getDurationMinutes());
 
         entry.replace(input.getDate(), input.getDurationMinutes(), input.getDescription(), project);
+        // Flush so the optimistic-lock version is incremented before the
+        // response is built — the client must see the new version.
+        timeEntryRepository.saveAndFlush(entry);
         return toResponse(entry);
     }
 
@@ -86,7 +91,12 @@ public class TimeEntryService {
         }
     }
 
-    private void requireDailyCap(LocalDate date, int alreadyRecorded, int additional, Long excludeId) {
+    /**
+     * The daily cap: sum of all entries for a date plus the new duration
+     * must not exceed 1440 min (24 h). Entries across different projects
+     * on the same date share the cap.
+     */
+    private void requireDailyCap(LocalDate date, int alreadyRecorded, int additional) {
         if (alreadyRecorded + additional > TimeEntry.MAX_DURATION_MINUTES) {
             throw new BusinessRuleException(
                     "Total time for %s would exceed 24 h (already recorded: %.2f h)"

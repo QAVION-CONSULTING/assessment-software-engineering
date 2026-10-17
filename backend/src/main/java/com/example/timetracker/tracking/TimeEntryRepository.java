@@ -10,13 +10,13 @@ public interface TimeEntryRepository extends JpaRepository<TimeEntry, Long> {
 
     /**
      * Combined filters (AND), ordered by date ascending.
-     * Null filters are simply not applied (handled by the service or via
-     * nullable parameter checks below).
+     * Null filters are simply not applied. The casts are required:
+     * PostgreSQL cannot infer parameter types from "? is null".
      */
     @Query("""
             select e from TimeEntry e
-            where (:date is null or e.date = :date)
-              and (:projectId is null or e.project.id = :projectId)
+            where (cast(:date as LocalDate) is null or e.date = :date)
+              and (cast(:projectId as Long) is null or e.project.id = :projectId)
             order by e.date asc, e.id asc
             """)
     List<TimeEntry> findByFilters(@Param("date") LocalDate date,
