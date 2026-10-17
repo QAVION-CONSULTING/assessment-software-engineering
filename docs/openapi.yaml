@@ -1,0 +1,432 @@
+openapi: 3.1.0
+info:
+  title: Timetracker API
+  version: 0.0.1
+  description: |
+    Time tracking API. Record working time per project and track time/cost budgets.
+servers:
+  - url: http://localhost:8080
+    description: Local dev
+tags:
+  - name: Projects
+  - name: Time Entries
+paths:
+  /api/projects:
+    get:
+      tags: [Projects]
+      summary: List all projects
+      operationId: listProjects
+      responses:
+        "200":
+          description: Projects with computed budget status
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ProjectResponse" }
+    post:
+      tags: [Projects]
+      summary: Create a project
+      operationId: createProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProjectInput" }
+            examples:
+              valid:
+                value:
+                  name: Website Relaunch
+                  description: Frontend and backend rework
+                  timeBudgetMinutes: 7200
+                  costBudgetCents: 960000
+                  hourlyRateCents: 8000
+      responses:
+        "201":
+          description: Created.
+          headers:
+            Location:
+              schema: { type: string }
+              example: /api/projects/1
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProjectResponse" }
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+              examples:
+                validation:
+                  value:
+                    status: 400
+                    error: Bad Request
+                    message: Validation failed
+                    details:
+                      - "name: must not be blank"
+                      - "timeBudgetMinutes: must be greater than 0"
+  /api/projects/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ProjectId"
+    get:
+      tags: [Projects]
+      summary: Get a project
+      operationId: getProject
+      responses:
+        "200":
+          description: The project
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProjectResponse" }
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags: [Projects]
+      summary: Replace a project (full update)
+      operationId: updateProject
+      description: |
+        Optimistic locking: send the last seen `version` as `If-Match`.
+        On mismatch the update is rejected with 409; re-fetch and retry.
+      parameters:
+        - name: If-Match
+          in: header
+          required: true
+          description: Version from the last read of this project.
+          schema: { type: integer, format: int64 }
+          example: 3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProjectInput" }
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProjectResponse" }
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/VersionConflict"
+    delete:
+      tags: [Projects]
+      summary: Delete a project and all its time entries
+      operationId: deleteProject
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/time-entries:
+    get:
+      tags: [Time Entries]
+      summary: List time entries
+      operationId: listTimeEntries
+      description: |
+        Filters are optional and can be combined (AND):
+        - `date` — only entries for that date
+        - `projectId` — only entries for that project
+        - no filter — all entries
+        All results ordered by date ascending.
+      parameters:
+        - name: date
+          in: query
+          required: false
+          description: ISO date (yyyy-MM-dd).
+          schema: { type: string, format: date }
+          example: "2026-10-17"
+        - name: projectId
+          in: query
+          required: false
+          schema: { type: integer, format: int64 }
+          example: 1
+      responses:
+        "200":
+          description: Time entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/TimeEntryResponse" }
+    post:
+      tags: [Time Entries]
+      summary: Create a time entry
+      operationId: createTimeEntry
+      description: |
+        Business rules (422 on violation):
+        - durationMinutes must be > 0
+        - a single entry cannot exceed 1440 minutes (24 h)
+        - the daily total for the date (existing entries + new duration) must not exceed 1440 minutes
+        - projectId must reference an existing project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TimeEntryInput" }
+            examples:
+              valid:
+                value:
+                  date: "2026-10-17"
+                  projectId: 1
+                  durationMinutes: 450
+                  description: Implemented budget status endpoint
+      responses:
+        "201":
+          description: Created. Location header points to the new resource.
+          headers:
+            Location:
+              schema: { type: string }
+              example: /api/time-entries/1
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TimeEntryResponse" }
+        "400":
+          description: Validation failed (e.g. future date, missing fields)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+              examples:
+                futureDate:
+                  value:
+                    status: 400
+                    error: Bad Request
+                    message: Validation failed
+                    details: ["date: must be a date in the past or in the present"]
+        "422":
+          description: Business rule violated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+              examples:
+                dailyCap:
+                  value:
+                    status: 422
+                    error: Unprocessable Entity
+                    message: "Total time for 2026-10-17 would exceed 24 h (already recorded: 20.00 h)"
+                    details: []
+                singleEntryOver24:
+                  value:
+                    status: 422
+                    error: Unprocessable Entity
+                    message: A single entry cannot exceed 24 hours
+                    details: []
+                unknownProject:
+                  value:
+                    status: 422
+                    error: Unprocessable Entity
+                    message: "Project not found: 999"
+                    details: []
+  /api/time-entries/{id}:
+    parameters:
+      - $ref: "#/components/parameters/TimeEntryId"
+    get:
+      tags: [Time Entries]
+      summary: Get a time entry
+      operationId: getTimeEntry
+      responses:
+        "200":
+          description: The time entry
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TimeEntryResponse" }
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags: [Time Entries]
+      summary: Replace a time entry (full update)
+      operationId: updateTimeEntry
+      description: |
+        Same business rules as create (including existing projectId); the daily-cap
+        check excludes the entry being updated.
+        Optimistic locking: send the last seen `version` as `If-Match`; 409 on mismatch.
+      parameters:
+        - name: If-Match
+          in: header
+          required: true
+          description: Version from the last read of this time entry.
+          schema: { type: integer, format: int64 }
+          example: 2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TimeEntryInput" }
+      responses:
+        "200":
+          description: Updated time entry
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TimeEntryResponse" }
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/VersionConflict"
+        "422":
+          description: Business rule violated (daily cap, duration bounds)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+    delete:
+      tags: [Time Entries]
+      summary: Delete a time entry
+      operationId: deleteTimeEntry
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+components:
+  parameters:
+    ProjectId:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+      example: 1
+    TimeEntryId:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+      example: 1
+  responses:
+    VersionConflict:
+      description: Version mismatch — the resource was modified concurrently
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
+          examples:
+            conflict:
+              value:
+                status: 409
+                error: Conflict
+                message: "Version mismatch: expected 3, current is 5"
+                details: []
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorResponse" }
+          examples:
+            project:
+              value:
+                status: 404
+                error: Not Found
+                message: "Project not found: 5"
+                details: []
+            timeEntry:
+              value:
+                status: 404
+                error: Not Found
+                message: "Time entry not found: 5"
+                details: []
+  schemas:
+    ProjectInput:
+      type: object
+      required: [name, timeBudgetMinutes, costBudgetCents, hourlyRateCents]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          example: Website Relaunch
+        description:
+          type: [string, "null"]
+          example: Frontend and backend rework
+        timeBudgetMinutes:
+          type: integer
+          minimum: 1
+          description: Time budget in minutes (7200 = 120 h).
+          example: 7200
+        costBudgetCents:
+          type: integer
+          minimum: 1
+          description: Cost budget in euro cents (960000 = 9600.00 EUR).
+          example: 960000
+        hourlyRateCents:
+          type: integer
+          minimum: 1
+          description: Hourly rate in euro cents per hour (8000 = 80.00 EUR/h).
+          example: 8000
+    ProjectResponse:
+      type: object
+      description: |
+        All money values are integer euro cents, all durations integer minutes.
+        Computed budget status (on read):
+        - recordedCostCents = round(recordedMinutes / 60 * hourlyRateCents) (HALF_UP)
+        - ratios rounded to 4 decimals (HALF_UP), can exceed 1.0
+        - warning = ratio >= 0.80 && ratio < 1.0
+        - exceeded = ratio >= 1.0
+      required: [id, name, version, timeBudgetMinutes, costBudgetCents, hourlyRateCents, recordedMinutes, recordedCostCents, timeBudgetRatio, costBudgetRatio, timeBudgetWarning, timeBudgetExceeded, costBudgetWarning, costBudgetExceeded]
+      properties:
+        id: { type: integer, format: int64, example: 1 }
+        name: { type: string, example: Website Relaunch }
+        description: { type: [string, "null"], example: Frontend and backend rework }
+        timeBudgetMinutes: { type: integer, example: 7200, description: '7200 = 120 h' }
+        costBudgetCents: { type: integer, example: 960000, description: '960000 = 9600.00 EUR' }
+        hourlyRateCents: { type: integer, example: 8000, description: '8000 = 80.00 EUR/h' }
+        version: { type: integer, format: int64, example: 3, description: 'Optimistic-lock version; send as If-Match on PUT' }
+        recordedMinutes: { type: integer, example: 4950, description: '4950 = 82.5 h' }
+        recordedCostCents: { type: integer, example: 660000, description: '660000 = 6600.00 EUR' }
+        timeBudgetRatio: { type: number, example: 0.8125, description: 'Scale 4, can exceed 1.0' }
+        costBudgetRatio: { type: number, example: 0.8125, description: 'Scale 4, can exceed 1.0' }
+        timeBudgetWarning: { type: boolean, example: true, description: 'ratio >= 0.80 && < 1.0' }
+        timeBudgetExceeded: { type: boolean, example: false, description: 'ratio >= 1.0' }
+        costBudgetWarning: { type: boolean, example: true }
+        costBudgetExceeded: { type: boolean, example: false }
+    TimeEntryInput:
+      type: object
+      required: [date, projectId, durationMinutes]
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2026-10-17"
+          description: Must not be in the future.
+        projectId:
+          type: integer
+          format: int64
+          example: 1
+        durationMinutes:
+          type: integer
+          minimum: 1
+          maximum: 1440
+          description: Duration in minutes (450 = 7.5 h); a single entry must not exceed 1440 (24 h).
+          example: 450
+        description:
+          type: [string, "null"]
+          example: Implemented budget status endpoint
+    TimeEntryResponse:
+      type: object
+      required: [id, date, projectId, projectName, durationMinutes, version]
+      properties:
+        id: { type: integer, format: int64, example: 1 }
+        date: { type: string, format: date, example: "2026-10-17" }
+        projectId: { type: integer, format: int64, example: 1 }
+        projectName: { type: string, example: Website Relaunch }
+        durationMinutes: { type: integer, example: 450, description: '450 = 7.5 h' }
+        version: { type: integer, format: int64, example: 2, description: 'Optimistic-lock version; send as If-Match on PUT' }
+        description: { type: [string, "null"], example: Implemented budget status endpoint }
+    ErrorResponse:
+      type: object
+      required: [status, error, message, details]
+      properties:
+        status: { type: integer, example: 422 }
+        error: { type: string, example: Unprocessable Entity }
+        message: { type: string, example: "Total time for 2026-10-17 would exceed 24 h (already recorded: 20.00 h)" }
+        details:
+          type: array
+          items: { type: string }
+          description: 'Field-level validation messages ("field: message"); empty for business-rule errors.'
+          example: ["name: must not be blank"]

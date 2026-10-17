@@ -1,0 +1,47 @@
+services:
+  e2e-db:
+    image: postgres:18
+    container_name: timetracker-e2e-postgres
+    profiles: [e2e]
+    environment:
+      POSTGRES_USER: e2e
+      POSTGRES_PASSWORD: e2e
+      POSTGRES_DB: e2e
+    expose:
+      - "5432"
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U e2e -d e2e"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  e2e-backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: timetracker-e2e-backend
+    profiles: [e2e]
+    environment:
+      POSTGRES_HOST: e2e-db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: e2e
+      POSTGRES_PASSWORD: e2e
+      POSTGRES_DB: e2e
+    expose:
+      - "8080"
+    depends_on:
+      e2e-db:
+        condition: service_healthy
+
+  e2e-frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: timetracker-e2e-frontend
+    profiles: [e2e]
+    ports:
+      - "5174:80"
+    depends_on:
+      - e2e-backend
