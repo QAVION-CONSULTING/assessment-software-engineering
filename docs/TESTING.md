@@ -53,6 +53,34 @@ Sum of entries for a date + new duration ≤ 1440 min, as a pure decision
 
 ## Frontend tests *(stub)*
 
+Stack: **Vitest + React Testing Library**, run with `npm test` in `frontend/`.
+The API layer (`src/api/endpoints.ts`) is mocked with `vi.mock`
+
+### Unit — pure helpers
+
+- `fmtEur` / `fmtHours` — cents→EUR, minutes→hours (de-DE locale)
+
+
+### Component — `ProjectsPage`
+
+- **create flow**: valid submit calls `createProject` with converted payloads
+  (hours→minutes, EUR→cents) and reloads the list
+- **error surfaces**: `ApiError` shows message + `details[]` in the modal
+- **validation**: empty name / zero budgets → field errors, no API call
+
+### Component — `TimeEntriesPage`
+
+- **filters drive the query**: date/project filter → matching query params;
+  clearing drops them
+- **validation**: duration ≤ 0 or > 24 h → field error, no API call
+
 
 ## End-to-end UI tests *(stub)*
 
+Stack: **Playwright**, run with `npm run e2e` in `frontend/`
+
+### Flow 
+
+1. `/projects` → create a project → row appears with green "ok" badge
+2. `/time-entries` → create an entry for it (today, 2 h) → row appears
+3. back on `/projects` → time usage shows `2 h / budget`, progress bar updated
