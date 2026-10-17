@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<openapi.spec>${project.basedir}/../docs/openapi.yaml</openapi.spec>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -122,7 +123,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/../docs/openapi.yaml</inputSpec>
+							<inputSpec>${openapi.spec}</inputSpec>
 							<generatorName>spring</generatorName>
 							<apiPackage>com.example.timetracker.api</apiPackage>
 							<modelPackage>com.example.timetracker.model</modelPackage>
