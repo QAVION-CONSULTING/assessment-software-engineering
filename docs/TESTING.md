@@ -51,7 +51,7 @@ Sum of entries for a date + new duration ≤ 1440 min, as a pure decision
 
 
 
-## Frontend tests *(stub)*
+## Frontend tests
 
 Stack: **Vitest + React Testing Library**, run with `npm test` in `frontend/`.
 The API layer (`src/api/endpoints.ts`) is mocked with `vi.mock`
@@ -75,7 +75,7 @@ The API layer (`src/api/endpoints.ts`) is mocked with `vi.mock`
 - **validation**: duration ≤ 0 or > 24 h → field error, no API call
 
 
-## End-to-end UI tests *(stub)*
+## End-to-end UI tests 
 
 Stack: **Playwright**, run with `npm run e2e` in `frontend/`
 
